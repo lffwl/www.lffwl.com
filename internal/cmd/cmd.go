@@ -12,15 +12,15 @@ import (
 
 var (
 	Main = gcmd.Command{
-		Name:  "main",
-		Usage: "main",
+		Name:  "www.lffwl.com",
+		Usage: "www.lffwl.com",
 		Brief: "start http server",
 		Func: func(ctx context.Context, parser *gcmd.Parser) (err error) {
 			s := g.Server()
 			s.Group("/", func(group *ghttp.RouterGroup) {
 				group.Middleware(ghttp.MiddlewareHandlerResponse)
 				group.Bind(
-					controller.Hello,
+					controller.ArticleType,
 				)
 			})
 			s.Run()
