@@ -22,14 +22,14 @@ type ArticleTypeStoreReq struct {
 type ArticleTypeStoreRes struct{}
 
 type ArticleTypeUpdateReq struct {
-	g.Meta `path:"/article_type/{Id}" tags:"ArticleType" method:"post" summary:"更新文章分类"`
+	g.Meta `path:"/article_type/{id}" tags:"ArticleType" method:"post" summary:"更新文章分类"`
 	Id     uint   `in:"path" v:"min:1#Id必须要大于0" dc:"id"`
 	Name   string `json:"name" dc:"文章分类名称"`
 }
 type ArticleTypeUpdateRes struct{}
 
 type ArticleTypeDeleteReq struct {
-	g.Meta `path:"/article_type/{Id}/delete" tags:"ArticleType" method:"post" summary:"删除文章分类"`
+	g.Meta `path:"/article_type/{id}/delete" tags:"ArticleType" method:"post" summary:"删除文章分类"`
 	Id     uint `in:"path" v:"min:1#Id必须要大于0" dc:"id"`
 }
 type ArticleTypeDeleteRes struct{}

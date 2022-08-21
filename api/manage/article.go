@@ -29,7 +29,7 @@ type ArticleStoreReq struct {
 type ArticleStoreRes struct{}
 
 type ArticleUpdateReq struct {
-	g.Meta  `path:"/article/{Id}" tags:"Article" method:"post" summary:"更新文章"`
+	g.Meta  `path:"/article/{id}" tags:"Article" method:"post" summary:"更新文章"`
 	Id      uint   `in:"path" v:"min:1#Id必须要大于0" dc:"id"`
 	Name    string `json:"name" v:"required#文章名称不能为空" dc:"文章名称"`
 	Content string `json:"content" dc:"文章内容"`
@@ -38,7 +38,7 @@ type ArticleUpdateReq struct {
 type ArticleUpdateRes struct{}
 
 type ArticleDeleteReq struct {
-	g.Meta `path:"/article/{Id}/delete" tags:"Article" method:"post" summary:"删除文章"`
+	g.Meta `path:"/article/{id}/delete" tags:"Article" method:"post" summary:"删除文章"`
 	Id     uint `in:"path" v:"min:1#Id必须要大于0" dc:"id"`
 }
 type ArticleDeleteRes struct{}

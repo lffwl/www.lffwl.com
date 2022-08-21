@@ -21,6 +21,7 @@ var (
 				group.Bind(
 					controller.ArticleType,
 					controller.Article,
+					controller.Api,
 				)
 			})
 			s.Run()
