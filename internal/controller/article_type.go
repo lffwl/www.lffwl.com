@@ -2,7 +2,7 @@ package controller
 
 import (
 	"context"
-	marticle "www.lffwl.com/internal/model"
+	"www.lffwl.com/internal/model"
 	"www.lffwl.com/internal/service/article"
 
 	"www.lffwl.com/api/manage"
@@ -16,11 +16,14 @@ type cArticleType struct{}
 
 func (c *cArticleType) Index(ctx context.Context, req *manage.ArticleTypeIndexReq) (res *manage.ArticleTypeIndexRes, err error) {
 
-	data, err := article.ArticleType(ctx).Index(marticle.ArticleTypeIndexInput{
+	data, err := article.ArticleType(ctx).Index(model.ArticleTypeIndexInput{
 		Page:  req.Page,
 		Limit: req.Size,
 		Name:  req.Name,
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	res = &manage.ArticleTypeIndexRes{
 		List: data.List,
@@ -36,7 +39,7 @@ func (c *cArticleType) Index(ctx context.Context, req *manage.ArticleTypeIndexRe
 
 func (c *cArticleType) Store(ctx context.Context, req *manage.ArticleTypeStoreReq) (res *manage.ArticleTypeStoreRes, err error) {
 
-	err = article.ArticleType(ctx).Store(marticle.ArticleTypeStoreInput{
+	err = article.ArticleType(ctx).Store(model.ArticleTypeStoreInput{
 		Name: req.Name,
 	})
 
@@ -45,7 +48,7 @@ func (c *cArticleType) Store(ctx context.Context, req *manage.ArticleTypeStoreRe
 
 func (c *cArticleType) Update(ctx context.Context, req *manage.ArticleTypeUpdateReq) (res *manage.ArticleTypeUpdateRes, err error) {
 
-	err = article.ArticleType(ctx).Update(marticle.ArticleTypeUpdateInput{
+	err = article.ArticleType(ctx).Update(model.ArticleTypeUpdateInput{
 		Id:   int(req.Id),
 		Name: req.Name,
 	})

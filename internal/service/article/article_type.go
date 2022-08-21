@@ -51,7 +51,7 @@ func (s *articleType) AllIndex() (output []entity.ArticleType, err error) {
 	return
 }
 
-func (s *articleType) ConfigAllIndex(ctx context.Context) (output map[int]string, err error) {
+func (s *articleType) ConfigAllIndex() (output map[int]string, err error) {
 
 	data, err := s.AllIndex()
 	if err != nil {
