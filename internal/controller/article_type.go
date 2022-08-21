@@ -2,10 +2,10 @@ package controller
 
 import (
 	"context"
-	marticle "www.lffwl.com/internal/model/article"
+	marticle "www.lffwl.com/internal/model"
 	"www.lffwl.com/internal/service/article"
 
-	"www.lffwl.com/api/admin"
+	"www.lffwl.com/api/manage"
 )
 
 var (
@@ -14,7 +14,7 @@ var (
 
 type cArticleType struct{}
 
-func (c *cArticleType) Index(ctx context.Context, req *admin.ArticleTypeIndexReq) (res *admin.ArticleTypeIndexRes, err error) {
+func (c *cArticleType) Index(ctx context.Context, req *manage.ArticleTypeIndexReq) (res *manage.ArticleTypeIndexRes, err error) {
 
 	data, err := article.ArticleType(ctx).Index(marticle.ArticleTypeIndexInput{
 		Page:  req.Page,
@@ -22,14 +22,40 @@ func (c *cArticleType) Index(ctx context.Context, req *admin.ArticleTypeIndexReq
 		Name:  req.Name,
 	})
 
-	res = &admin.ArticleTypeIndexRes{
+	res = &manage.ArticleTypeIndexRes{
 		List: data.List,
-		CommonPageRes: admin.CommonPageRes{
+		CommonPageRes: manage.CommonPageRes{
 			Page:  req.Page,
 			Size:  req.Size,
 			Total: data.Total,
 		},
 	}
+
+	return
+}
+
+func (c *cArticleType) Store(ctx context.Context, req *manage.ArticleTypeStoreReq) (res *manage.ArticleTypeStoreRes, err error) {
+
+	err = article.ArticleType(ctx).Store(marticle.ArticleTypeStoreInput{
+		Name: req.Name,
+	})
+
+	return
+}
+
+func (c *cArticleType) Update(ctx context.Context, req *manage.ArticleTypeUpdateReq) (res *manage.ArticleTypeUpdateRes, err error) {
+
+	err = article.ArticleType(ctx).Update(marticle.ArticleTypeUpdateInput{
+		Id:   int(req.Id),
+		Name: req.Name,
+	})
+
+	return
+}
+
+func (c *cArticleType) Delete(ctx context.Context, req *manage.ArticleTypeDeleteReq) (res *manage.ArticleTypeDeleteRes, err error) {
+
+	err = article.ArticleType(ctx).PkDelete(int(req.Id))
 
 	return
 }

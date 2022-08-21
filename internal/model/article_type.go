@@ -1,4 +1,4 @@
-package article
+package model
 
 import "www.lffwl.com/internal/model/entity"
 

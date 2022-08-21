@@ -5,7 +5,7 @@ import (
 	"errors"
 	"github.com/gogf/gf/v2/database/gdb"
 	"www.lffwl.com/internal/dao"
-	"www.lffwl.com/internal/model/article"
+	"www.lffwl.com/internal/model"
 	"www.lffwl.com/internal/model/entity"
 )
 
@@ -21,14 +21,14 @@ func ArticleType(ctx context.Context) *articleType {
 	}
 }
 
-func (s *articleType) Index(input article.ArticleTypeIndexInput) (output *article.ArticleTypeIndexOutput, err error) {
+func (s *articleType) Index(input model.ArticleTypeIndexInput) (output *model.ArticleTypeIndexOutput, err error) {
 
-	output = &article.ArticleTypeIndexOutput{}
+	output = &model.ArticleTypeIndexOutput{}
 
 	m := s.model
 
 	if input.Name != "" {
-		m = m.Where(dao.ArticleType.Columns().Name, "%"+input.Name+"%")
+		m = m.WhereLike(dao.ArticleType.Columns().Name, "%"+input.Name+"%")
 	}
 
 	if err = m.Page(input.Page, input.Limit).Scan(&output.List); err != nil {
@@ -84,7 +84,7 @@ func (s *articleType) CheckNameUnique(name string, id ...int) (bool, error) {
 	return false, nil
 }
 
-func (s *articleType) Store(input article.ArticleTypeStoreInput) error {
+func (s *articleType) Store(input model.ArticleTypeStoreInput) error {
 
 	if exist, err := s.CheckNameUnique(input.Name); err != nil {
 		return err
@@ -111,7 +111,7 @@ func (s *articleType) CheckIdExist(id int) (bool, error) {
 
 }
 
-func (s *articleType) Update(input article.ArticleTypeUpdateInput) error {
+func (s *articleType) Update(input model.ArticleTypeUpdateInput) error {
 
 	if exist, err := s.CheckIdExist(input.Id); err != nil {
 		return err
