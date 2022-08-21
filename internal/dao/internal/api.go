@@ -21,7 +21,7 @@ type ApiDao struct {
 // ApiColumns defines and stores column names for table api.
 type ApiColumns struct {
 	Id        string //
-	Meun      string // 菜单地址
+	Menu      string // 菜单地址
 	Name      string // 名称
 	Key       string // 标识
 	Path      string // 请求地址
@@ -35,7 +35,7 @@ type ApiColumns struct {
 //  apiColumns holds the columns for table api.
 var apiColumns = ApiColumns{
 	Id:        "id",
-	Meun:      "meun",
+	Menu:      "menu",
 	Name:      "name",
 	Key:       "key",
 	Path:      "path",

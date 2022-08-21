@@ -11,7 +11,7 @@ import (
 // Api is the golang structure for table api.
 type Api struct {
 	Id        int         `json:"id"        description:""`
-	Meun      string      `json:"meun"      description:"菜单地址"`
+	Menu      string      `json:"menu"      description:"菜单地址"`
 	Name      string      `json:"name"      description:"名称"`
 	Key       string      `json:"key"       description:"标识"`
 	Path      string      `json:"path"      description:"请求地址"`

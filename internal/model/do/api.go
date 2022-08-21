@@ -13,7 +13,7 @@ import (
 type Api struct {
 	g.Meta    `orm:"table:api, do:true"`
 	Id        interface{} //
-	Meun      interface{} // 菜单地址
+	Menu      interface{} // 菜单地址
 	Name      interface{} // 名称
 	Key       interface{} // 标识
 	Path      interface{} // 请求地址
