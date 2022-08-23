@@ -6,13 +6,13 @@ import (
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/util/gconv"
+	"github.com/lffwl/utility/file"
 	"io/ioutil"
 	"os"
 	"time"
 	"www.lffwl.com/internal/dao"
 	"www.lffwl.com/internal/model"
 	"www.lffwl.com/internal/model/entity"
-	"www.lffwl.com/utility/utils"
 )
 
 type article struct {
@@ -66,7 +66,7 @@ func (s *article) CreateFilePath() string {
 
 	filePath := g.Cfg().MustGet(s.ctx, "file.articlePath").String() + now.Format("/2006-01-02/") + gconv.String(now.Nanosecond()) + ".txt"
 
-	if err := utils.CreateMultiDir(filePath); err != nil {
+	if err := file.CreateFilePathDir(filePath); err != nil {
 		g.Log().Error(s.ctx, err)
 	}
 
