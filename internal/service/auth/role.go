@@ -27,7 +27,7 @@ func (s *role) Index(input model.RoleIndexInput) (output *model.RoleIndexOutput,
 	m := s.model
 
 	if input.Name != "" {
-		m = m.WhereLike(dao.ArticleType.Columns().Name, "%"+input.Name+"%")
+		m = m.WhereLike(dao.Role.Columns().Name, "%"+input.Name+"%")
 	}
 
 	if err = m.Page(input.Page, input.Limit).Scan(&output.List); err != nil {
