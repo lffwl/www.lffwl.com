@@ -2,12 +2,11 @@ package cmd
 
 import (
 	"context"
+	"www.lffwl.com/internal/controller/manage"
 
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gcmd"
-
-	"www.lffwl.com/internal/controller"
 )
 
 var (
@@ -19,10 +18,11 @@ var (
 			s.Group("/manage", func(group *ghttp.RouterGroup) {
 				group.Middleware(ghttp.MiddlewareHandlerResponse)
 				group.Bind(
-					controller.ArticleType,
-					controller.Article,
-					controller.Api,
-					controller.Role,
+					manage.ArticleType,
+					manage.Article,
+					manage.Api,
+					manage.Role,
+					manage.Admin,
 				)
 			})
 			s.Run()

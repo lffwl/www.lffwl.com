@@ -50,8 +50,8 @@ github.com/grokify/html-strip-tags-go v0.0.1/go.mod h1:2Su6romC5/1VXOQMaWL2yb618
 github.com/hpcloud/tail v1.0.0/go.mod h1:ab1qPbhIpdTxEkNHXyeSf5vhxWSCs/tWer42PpOxQnU=
 github.com/json-iterator/go v1.1.12 h1:PV8peI4a0ysnczrg+LtxykD8LfKY9ML6u2jnxaEnrnM=
 github.com/json-iterator/go v1.1.12/go.mod h1:e30LSqwooZae/UwlEbR2852Gd8hjQvJoHmT4TnhNGBo=
-github.com/lffwl/utility v0.0.0-20220823020817-5951b9d1124b h1:WZKsvPA61R8uvdTI34tw5idIocQ6RFF48zc3EdV7MBQ=
-github.com/lffwl/utility v0.0.0-20220823020817-5951b9d1124b/go.mod h1:bu6JQH/y9udUtdqNZ0l4ErO5J+NVxwfOVw2PNCxaKOQ=
+github.com/lffwl/utility v0.0.0-20220824081915-ad0743093ea1 h1:uSN6SMV2Cb8hy6mrB5SyM2p192F+XTwPO5NGYwaZXko=
+github.com/lffwl/utility v0.0.0-20220824081915-ad0743093ea1/go.mod h1:bu6JQH/y9udUtdqNZ0l4ErO5J+NVxwfOVw2PNCxaKOQ=
 github.com/longbridgeapp/sqlparser v0.3.1 h1:iWOZWGIFgQrJRgobLXUNJdvqGRpbVXkyKUKUA5CNJBE=
 github.com/longbridgeapp/sqlparser v0.3.1/go.mod h1:GIHaUq8zvYyHLCLMJJykx1CdM6LHtkUih/QaJXySSx4=
 github.com/mattn/go-colorable v0.1.9 h1:sqDoxXbdeALODt0DAeJCVp38ps9ZogZEAXjus69YV3U=
