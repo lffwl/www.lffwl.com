@@ -22,6 +22,7 @@ var (
 					controller.ArticleType,
 					controller.Article,
 					controller.Api,
+					controller.Role,
 				)
 			})
 			s.Run()
