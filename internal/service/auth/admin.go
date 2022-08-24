@@ -125,11 +125,14 @@ func (s *admin) PkDelete(id int) error {
 		return errors.New("ID不存在")
 	}
 
-	if _, err := s.model.Where(dao.Admin.Columns().Id, id).Delete(); err != nil {
-		return err
-	}
+	return s.model.Transaction(s.ctx, func(ctx context.Context, tx *gdb.TX) error {
 
-	return nil
+		if _, err := s.model.Where(dao.Admin.Columns().Id, id).Delete(); err != nil {
+			return err
+		}
+
+		return AdminRole(ctx).Delete(id)
+	})
 }
 
 func (s *admin) Info(id int, columnsEx ...string) (output *entity.Admin, err error) {
