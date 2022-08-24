@@ -20,11 +20,19 @@ func AdminRole(ctx context.Context) *adminRole {
 	}
 }
 
+func (s *adminRole) Delete(adminId int) error {
+	if _, err := s.model.Where(dao.AdminRole.Columns().AdminId, adminId).Delete(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (s *adminRole) Save(input model.AdminRoleSaveInput) error {
 
 	return s.model.Transaction(s.ctx, func(ctx context.Context, tx *gdb.TX) error {
 
-		if _, err := s.model.Where(dao.AdminRole.Columns().AdminId, input.AdminId).Delete(); err != nil {
+		if err := s.Delete(input.AdminId); err != nil {
 			return err
 		}
 

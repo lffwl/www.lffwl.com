@@ -20,11 +20,18 @@ func RoleApi(ctx context.Context) *roleApi {
 	}
 }
 
+func (s *roleApi) Delete(roleId int) error {
+	if _, err := s.model.Where(dao.RoleApi.Columns().RoleId, roleId).Delete(); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (s *roleApi) Save(input model.RoleApiSaveInput) error {
 
 	return s.model.Transaction(s.ctx, func(ctx context.Context, tx *gdb.TX) error {
 
-		if _, err := s.model.Where(dao.RoleApi.Columns().RoleId, input.RoleId).Delete(); err != nil {
+		if err := s.Delete(input.RoleId); err != nil {
 			return err
 		}
 
