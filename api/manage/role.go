@@ -37,7 +37,7 @@ type RoleDeleteReq struct {
 type RoleDeleteRes struct{}
 
 type RoleShowReq struct {
-	g.Meta `path:"/role/{id}" tags:"Role" method:"get" summary:"删除角色"`
+	g.Meta `path:"/role/{id}" tags:"Role" method:"get" summary:"角色详情"`
 	Id     uint `in:"path" v:"min:1#Id必须要大于0" dc:"id"`
 }
 type RoleShowRes struct {
