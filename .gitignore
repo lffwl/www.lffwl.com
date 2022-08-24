@@ -20,3 +20,6 @@ manifest/output/
 temp/
 hack/
 manifest/config/config.yaml
+internal/model/do/
+internal/model/entity/
+internal/dao/
