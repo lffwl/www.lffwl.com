@@ -48,9 +48,14 @@ func (s *api) CheckPathMethodExist(path string, method int, id ...int) (bool, er
 	return false, nil
 }
 
-func (s *api) CheckFieldExist(field string, value interface{}) (bool, error) {
+func (s *api) CheckFieldExist(field string, value interface{}, id ...int) (bool, error) {
+	m := s.model
 
-	if num, err := s.model.Where(field, value).Count(); err != nil {
+	if len(id) > 0 {
+		m = m.WhereNot(dao.Api.Columns().Id, id[0])
+	}
+
+	if num, err := m.Where(field, value).Count(); err != nil {
 		return false, err
 	} else if num > 0 {
 		return true, nil
@@ -63,8 +68,8 @@ func (s *api) CheckIdExist(id int) (bool, error) {
 	return s.CheckFieldExist(dao.Api.Columns().Id, id)
 }
 
-func (s *api) CheckKeyExist(key string) (bool, error) {
-	return s.CheckFieldExist(dao.Api.Columns().Key, key)
+func (s *api) CheckKeyExist(key string, id ...int) (bool, error) {
+	return s.CheckFieldExist(dao.Api.Columns().Key, key, id...)
 }
 
 func (s *api) Store(input model.ApiStoreInput) (err error) {
@@ -114,7 +119,7 @@ func (s *api) Update(input model.ApiUpdateInput) (err error) {
 		}
 	}
 
-	if exist, err := s.CheckKeyExist(input.Key); err != nil {
+	if exist, err := s.CheckKeyExist(input.Key, input.Id); err != nil {
 		return err
 	} else if exist {
 		return errors.New("标识已存在")
