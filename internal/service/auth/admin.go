@@ -168,3 +168,7 @@ func (s *admin) Show(id int) (output *model.AdminShowOutput, err error) {
 
 	return
 }
+
+func (s *admin) GetInfoByUserName(username string) {
+
+}

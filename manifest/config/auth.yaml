@@ -1,0 +1,7 @@
+jwt:
+  issuer: "www.lffwl.com"
+  expiryAt: 8
+  refreshTokenAt: 2
+  encryptKey: "qeGBP6ibZTYsodHVmC6PjrKPziuulM"
+  tokenKey: "Access-Token"
+  tokenLookup: "header"
