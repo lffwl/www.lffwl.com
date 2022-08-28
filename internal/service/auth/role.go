@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/gogf/gf/v2/database/gdb"
+	"github.com/gogf/gf/v2/frame/g"
 	"www.lffwl.com/internal/dao"
 	"www.lffwl.com/internal/model"
 	"www.lffwl.com/internal/model/entity"
@@ -105,7 +106,7 @@ func (s *role) Update(input model.RoleUpdateInput) (err error) {
 
 	return s.model.Transaction(s.ctx, func(ctx context.Context, tx *gdb.TX) error {
 
-		if _, err = s.model.Data(input).Update(); err != nil {
+		if _, err = s.model.FieldsEx(dao.Role.Columns().Id).Where(dao.Role.Columns().Id, input.Id).Data(input).Update(); err != nil {
 			return err
 		}
 
@@ -118,6 +119,10 @@ func (s *role) Update(input model.RoleUpdateInput) (err error) {
 }
 
 func (s *role) PkDelete(id int) error {
+
+	if id == g.Cfg("auth").MustGet(s.ctx, "superRoleId").Int() {
+		return errors.New("超级管理员不能删除")
+	}
 
 	if exist, err := s.CheckIdExist(id); err != nil {
 		return err

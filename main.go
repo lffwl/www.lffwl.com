@@ -1,9 +1,8 @@
 package main
 
 import (
-	_ "www.lffwl.com/internal/packed"
-
 	"github.com/gogf/gf/v2/os/gctx"
+	_ "www.lffwl.com/internal/packed"
 
 	"www.lffwl.com/internal/cmd"
 )

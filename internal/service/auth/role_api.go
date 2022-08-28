@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"github.com/gogf/gf/v2/database/gdb"
+	"github.com/gogf/gf/v2/util/gconv"
 	"www.lffwl.com/internal/dao"
 	"www.lffwl.com/internal/model"
 	"www.lffwl.com/internal/model/entity"
@@ -56,9 +57,20 @@ func (s *roleApi) Save(input model.RoleApiSaveInput) error {
 
 func (s *roleApi) GetApis(roleId int) (output []int, err error) {
 
-	if err = s.model.Where(dao.RoleApi.Columns().RoleId, roleId).Fields(dao.RoleApi.Columns().ApiId).Scan(&output); err != nil {
+	apis, err := s.model.Where(dao.RoleApi.Columns().RoleId, roleId).Distinct().Fields(dao.RoleApi.Columns().ApiId).Array()
+	if err != nil {
 		return nil, err
 	}
 
-	return
+	return gconv.Ints(apis), nil
+}
+
+func (s *roleApi) GetApisByRoles(roleId []int) (output []int, err error) {
+
+	apis, err := s.model.WhereIn(dao.RoleApi.Columns().RoleId, roleId).Distinct().Fields(dao.RoleApi.Columns().ApiId).Array()
+	if err != nil {
+		return nil, err
+	}
+
+	return gconv.Ints(apis), nil
 }

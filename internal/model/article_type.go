@@ -21,3 +21,8 @@ type ArticleTypeUpdateInput struct {
 	Id   int
 	Name string
 }
+
+type ArticleTypeAllIndexOutput struct {
+	Id   int
+	Name string
+}

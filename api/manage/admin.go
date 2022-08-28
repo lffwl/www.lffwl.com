@@ -48,5 +48,5 @@ type AdminShowRes struct {
 	Username  string      `json:"username"  dc:"用户名"`
 	CreatedAt *gtime.Time `json:"createdAt" dc:""`
 	UpdatedAt *gtime.Time `json:"updatedAt" dc:""`
-	Roles     []int
+	Roles     []int       `json:"roles" dc:"角色"`
 }

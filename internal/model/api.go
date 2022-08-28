@@ -1,5 +1,9 @@
 package model
 
+type ApiIndexInput struct {
+	Ids []int
+}
+
 type ApiStoreInput struct {
 	Menu   string
 	Name   string

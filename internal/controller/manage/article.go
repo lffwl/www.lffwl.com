@@ -47,6 +47,7 @@ func (c *cArticle) Store(ctx context.Context, req *manage.ArticleStoreReq) (res 
 		TypeId:  req.TypeId,
 		Content: req.Content,
 		Name:    req.Name,
+		Desc:    req.Desc,
 	})
 
 	return
@@ -59,6 +60,7 @@ func (c *cArticle) Update(ctx context.Context, req *manage.ArticleUpdateReq) (re
 		TypeId:  req.TypeId,
 		Content: req.Content,
 		Name:    req.Name,
+		Desc:    req.Desc,
 	})
 
 	return
@@ -67,6 +69,24 @@ func (c *cArticle) Update(ctx context.Context, req *manage.ArticleUpdateReq) (re
 func (c *cArticle) Delete(ctx context.Context, req *manage.ArticleDeleteReq) (res *manage.ArticleDeleteRes, err error) {
 
 	err = article.Article(ctx).PkDelete(int(req.Id))
+
+	return
+}
+
+func (c *cArticle) Show(ctx context.Context, req *manage.ArticleShowReq) (res *manage.ArticleShowRes, err error) {
+
+	data, err := article.Article(ctx).Show(int(req.Id))
+	if err != nil {
+		return nil, err
+	}
+
+	res = &manage.ArticleShowRes{
+		Id:      data.Id,
+		Name:    data.Name,
+		TypeId:  data.TypeId,
+		Content: data.Content,
+		Desc:    data.Desc,
+	}
 
 	return
 }

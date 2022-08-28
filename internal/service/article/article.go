@@ -64,7 +64,7 @@ func (s *article) Index(input model.ArticleIndexInput) (output *model.ArticleInd
 func (s *article) CreateFilePath() string {
 	now := time.Now()
 
-	filePath := g.Cfg().MustGet(s.ctx, "file.articlePath").String() + now.Format("/2006-01-02/") + gconv.String(now.Nanosecond()) + ".txt"
+	filePath := g.Cfg().MustGet(s.ctx, "file.articlePath").String() + now.Format("/2006-01-02/") + gconv.String(now.Second()) + gconv.String(now.Nanosecond()) + ".txt"
 
 	if err := file.CreateFilePathDir(filePath); err != nil {
 		g.Log().Error(s.ctx, err)
@@ -77,7 +77,7 @@ func (s *article) CreateFilePath() string {
 func (s *article) SaveContent(content string, path ...string) (string, error) {
 
 	var filePath string
-	if len(path) > 0 {
+	if len(path) > 0 && path[0] != "" {
 		filePath = path[0]
 	} else {
 		filePath = s.CreateFilePath()
@@ -168,4 +168,36 @@ func (s *article) PkDelete(id int) error {
 	}
 
 	return nil
+}
+
+func (s *article) Show(id int) (output *model.ArticleShowOutput, err error) {
+
+	if exist, err := s.CheckIdExist(id); err != nil {
+		return nil, err
+	} else if !exist {
+		return nil, errors.New("ID不存在")
+	}
+
+	info, err := s.Info(id)
+	if err != nil {
+		return nil, err
+	}
+
+	output = &model.ArticleShowOutput{
+		Id:     info.Id,
+		Name:   info.Name,
+		TypeId: info.TypeId,
+		Desc:   info.Desc,
+	}
+
+	if info.Content != "" {
+		bytes, err := ioutil.ReadFile(info.Content)
+		if err != nil {
+			return nil, err
+		}
+
+		output.Content = string(bytes[:])
+	}
+
+	return
 }

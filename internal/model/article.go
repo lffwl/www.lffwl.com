@@ -17,6 +17,7 @@ type ArticleIndexOutput struct {
 type ArticleStoreInput struct {
 	TypeId  int
 	Content string
+	Desc    string
 	Name    string
 }
 
@@ -25,4 +26,13 @@ type ArticleUpdateInput struct {
 	Name    string
 	TypeId  int
 	Content string
+	Desc    string
+}
+
+type ArticleShowOutput struct {
+	Id      int
+	Name    string
+	TypeId  int
+	Content string
+	Desc    string
 }

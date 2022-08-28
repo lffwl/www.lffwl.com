@@ -25,8 +25,8 @@ func (c *cApi) Index(ctx context.Context, req *manage.ApiIndexReq) (res *manage.
 		List: data,
 	}
 
-	res.Config.Method = g.Cfg().MustGet(ctx, "auth.method").MapStrStr()
-	res.Config.Type = g.Cfg().MustGet(ctx, "auth.type").MapStrStr()
+	res.Config.Method = g.Cfg("auth").MustGet(ctx, "menu.method").MapStrStr()
+	res.Config.Type = g.Cfg("auth").MustGet(ctx, "menu.type").MapStrStr()
 
 	return
 }

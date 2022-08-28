@@ -21,6 +21,22 @@ func Api(ctx context.Context) *api {
 	}
 }
 
+func (s *api) Index(input model.ApiIndexInput) (output []entity.Api, err error) {
+
+	m := s.model
+
+	if len(input.Ids) > 0 {
+		m = m.WhereIn(dao.Api.Columns().Id, input.Ids)
+	}
+
+	if err = m.Scan(&output); err != nil {
+		return nil, err
+	}
+
+	return
+
+}
+
 func (s *api) AllIndex() (output []entity.Api, err error) {
 
 	if err = s.model.Scan(&output); err != nil {

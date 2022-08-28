@@ -76,7 +76,7 @@ func (c *cRole) Show(ctx context.Context, req *manage.RoleShowReq) (res *manage.
 			CreatedAt: data.CreatedAt,
 			UpdatedAt: data.UpdatedAt,
 		},
-		Apis: res.Apis,
+		Apis: data.Apis,
 	}
 
 	return

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/gogf/gf/v2/database/gdb"
+	"github.com/lffwl/utility/dataproc"
 	"www.lffwl.com/internal/dao"
 	"www.lffwl.com/internal/model"
 	"www.lffwl.com/internal/model/entity"
@@ -74,6 +75,8 @@ func (s *admin) Store(input model.AdminStoreInput) (err error) {
 		return errors.New("管理员名称已存在")
 	}
 
+	input.Password = dataproc.SecretHashEncode(input.Password)
+
 	return s.model.Transaction(s.ctx, func(ctx context.Context, tx *gdb.TX) error {
 
 		insertId, err := s.model.Data(input).InsertAndGetId()
@@ -103,9 +106,18 @@ func (s *admin) Update(input model.AdminUpdateInput) (err error) {
 		return errors.New("管理员名称已存在")
 	}
 
+	fieldsEx := []string{
+		dao.Admin.Columns().Id,
+	}
+	if input.Password != "" {
+		input.Password = dataproc.SecretHashEncode(input.Password)
+	} else {
+		fieldsEx = append(fieldsEx, dao.Admin.Columns().Password)
+	}
+
 	return s.model.Transaction(s.ctx, func(ctx context.Context, tx *gdb.TX) error {
 
-		if _, err = s.model.Data(input).Update(); err != nil {
+		if _, err = s.model.FieldsEx(fieldsEx).Where(dao.Admin.Columns().Id, input.Id).Data(input).Update(); err != nil {
 			return err
 		}
 
@@ -169,6 +181,12 @@ func (s *admin) Show(id int) (output *model.AdminShowOutput, err error) {
 	return
 }
 
-func (s *admin) GetInfoByUserName(username string) {
+func (s *admin) GetInfoByUserName(username string, columns ...string) (output *entity.Admin, err error) {
+	output = &entity.Admin{}
 
+	if err = s.model.Where(dao.Admin.Columns().Username, username).Fields(columns).Scan(output); err != nil {
+		return nil, err
+	}
+
+	return output, nil
 }

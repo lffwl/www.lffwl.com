@@ -6,7 +6,6 @@ import (
 	"github.com/gogf/gf/v2/database/gdb"
 	"www.lffwl.com/internal/dao"
 	"www.lffwl.com/internal/model"
-	"www.lffwl.com/internal/model/entity"
 )
 
 type articleType struct {
@@ -42,9 +41,9 @@ func (s *articleType) Index(input model.ArticleTypeIndexInput) (output *model.Ar
 	return
 }
 
-func (s *articleType) AllIndex() (output []entity.ArticleType, err error) {
+func (s *articleType) AllIndex() (output []model.ArticleTypeAllIndexOutput, err error) {
 
-	if err = s.model.Scan(&output); err != nil {
+	if err = s.model.Fields(dao.ArticleType.Columns().Id, dao.ArticleType.Columns().Name).Scan(&output); err != nil {
 		return nil, err
 	}
 
@@ -52,6 +51,8 @@ func (s *articleType) AllIndex() (output []entity.ArticleType, err error) {
 }
 
 func (s *articleType) ConfigAllIndex() (output map[int]string, err error) {
+
+	output = map[int]string{}
 
 	data, err := s.AllIndex()
 	if err != nil {

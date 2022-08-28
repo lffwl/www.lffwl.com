@@ -42,3 +42,8 @@ type AdminShowOutput struct {
 	UpdatedAt *gtime.Time
 	Roles     []int
 }
+
+type AdminAuthData struct {
+	Id       int
+	Username string
+}

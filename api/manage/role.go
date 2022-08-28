@@ -42,5 +42,5 @@ type RoleShowReq struct {
 }
 type RoleShowRes struct {
 	entity.Role
-	Apis []int
+	Apis []int `json:"apis"`
 }

@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"github.com/gogf/gf/v2/database/gdb"
+	"github.com/gogf/gf/v2/util/gconv"
 	"www.lffwl.com/internal/dao"
 	"www.lffwl.com/internal/model"
 	"www.lffwl.com/internal/model/entity"
@@ -57,9 +58,11 @@ func (s *adminRole) Save(input model.AdminRoleSaveInput) error {
 
 func (s *adminRole) GetRoles(adminId int) (output []int, err error) {
 
-	if err = s.model.Where(dao.AdminRole.Columns().AdminId, adminId).Fields(dao.AdminRole.Columns().RoleId).Scan(&output); err != nil {
+	roles, err := s.model.Where(dao.AdminRole.Columns().AdminId, adminId).Fields(dao.AdminRole.Columns().RoleId).Array()
+	if err != nil {
 		return nil, err
 	}
 
-	return
+	return gconv.Ints(roles), err
+
 }
