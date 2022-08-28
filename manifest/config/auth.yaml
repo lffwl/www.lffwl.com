@@ -5,3 +5,20 @@ jwt:
   encryptKey: "qeGBP6ibZTYsodHVmC6PjrKPziuulM"
   tokenKey: "Access-Token"
   tokenLookup: "header"
+
+
+notLogin: [ "/manage/auth/login" ]
+
+menu:
+  method:
+    1: "Get"
+    2: "Post"
+    3: "Put"
+    4: "Delete"
+  type:
+    1: "目录"
+    2: "菜单"
+    3: "按钮"
+
+## 超级管理员ID
+superRoleId: 1
