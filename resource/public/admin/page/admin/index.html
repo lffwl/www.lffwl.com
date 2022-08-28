@@ -1,0 +1,69 @@
+<div class="layui-btn-group">
+    <button type="button" class="layui-btn" data-action="manage.auth.admin.store" id="system-admin-save">
+        <i class="layui-icon layui-icon-addition"></i> 新增
+    </button>
+</div>
+<table class="layui-hide" id="L-table-admin" lay-filter="L-table-admin"></table>
+<div id="L-table-admin-action" class="layui-hide">
+    <a class="layui-btn layui-btn-xs" lay-event="update" data-action="manage.auth.admin.update">编辑</a>
+    <a class="layui-btn layui-btn-xs" lay-event="delete" data-action="manage.auth.admin.delete">删除</a>
+</div>
+<script>
+    L.openPage[L.page] = {
+        init: function (data) {
+            L.loadTable({
+                url: '/admin',
+                type: 'GET',
+                loadTitle: '加载中...',
+                where: data || {},
+                elem: '#L-table-admin',
+                cols: [[
+                    {field: 'id', title: 'ID', width: 100}
+                    , {field: 'username', title: '名称'}
+                    , {field: 'createdAt', title: '添加时间'}
+                    , {field: 'updatedAt', title: '最近修改时间'}
+                    , {title: '操作', width: 200, align: 'center', toolbar: '#L-table-admin-action'}
+                ]]
+            });
+        }
+    };
+
+    layui.table.on('tool(L-table-admin)', function (obj) {
+        if (obj.event == 'update') {
+            L.ajax({
+                url: '/admin/' + obj.data.id,
+                type: 'Get',
+                success: function (ajaxData) {
+                    if (ajaxData.code === 0) {
+                        L.pageObj().formData = ajaxData.data;
+                        L.loadPage({
+                            url: '/page/admin/save'
+                        }, 'open', '编辑管理员', {area: ["60%", "80%"]});
+                    }
+                },
+            })
+        } else if (obj.event == 'delete') {
+            L.deleteRow({
+                url: '/admin/' + obj.data.id + '/delete',
+                success: function (ajaxData) {
+                    if (ajaxData.code === 0) {
+                        layer.msg(ajaxData.message, {icon: 1});
+                        L.pageObj().init();
+                    } else {
+                        layer.msg(ajaxData.message, {icon: 2});
+                    }
+                }
+            });
+        }
+    });
+
+    L.pageObj().init();
+
+    //新增
+    $("#system-admin-save").click(function () {
+        delete L.pageObj().formData;
+        L.loadPage({
+            url: '/page/admin/save'
+        }, 'open', '新增管理员', {area: ["60%", "80%"]});
+    });
+</script>

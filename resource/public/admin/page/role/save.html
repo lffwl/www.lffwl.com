@@ -1,0 +1,109 @@
+<div class="open-div-main">
+    <form class="layui-form layui-form-pane" lay-filter="role-save-form">
+        <div class="layui-form-item required">
+            <label class="layui-form-label">角色名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" required lay-verify="required" placeholder="请输入角色名称" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <table class="layui-hide" id="L-table-role-set-power" lay-filter="L-table-role-set-power"></table>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn" lay-submit lay-filter="role-save-sub">立即提交</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script id="role-pid-tpl" type="text/html">
+    <option value=""></option>
+    {{#  layui.each(d, function(index, item){ }}
+    <option value="{{item.id}}">{{item.level_name}}{{item.name}}</option>
+    {{#  }); }}
+</script>
+<script>
+
+    let setPower = {
+        init: function (data) {
+            L.loadTable({
+                url: '/api',
+                where: data || {},
+                elem: '#L-table-role-set-power',
+                page: false,
+                cols: [[
+                    {type: 'checkbox'},
+                    {field: 'id', title: 'ID', width: 100}
+                    , {
+                        field: 'name', title: '菜单名称', templet: function (d) {
+                            return d.level + d.name;
+                        }
+                    }
+                    , {
+                        field: 'type', title: '菜单类型', templet: function (d) {
+                            return setPower.data.config.type[d.type] ?? '';
+                        }, width: 100
+                    }
+                    , {field: 'key', title: '标识'}
+                    , {field: 'path', title: '接口地址'}
+                    , {
+                        field: 'method', title: '请求类型', templet: function (d) {
+                            return setPower.data.config.method[d.method] ?? '';
+                        }, width: 100
+                    }
+                    , {field: 'menu', title: '菜单地址'}
+                ]]
+                , height: 'full-230'
+                , handleData: function (data) {
+                    return toTreeList(data, 0, 0)
+                }
+                , loadOver: function (res) {
+                    if (L.pageObj().hasOwnProperty('formData')) {
+                        if (L.pageObj().formData.apis.length > 0) {
+                            layuiTableCheckboxDefault(L.pageObj().formData.apis, $(".layui-table-view[lay-id=L-table-role-set-power]").find('.layui-table-main'), 1);
+                        }
+                    }
+                }
+            }, setPower);
+        }
+    };
+
+    setPower.init();
+
+    let url = '/role', type = 'POST';
+    layui.form.render();
+    layui.laytpl($("#role-pid-tpl").html()).render(L.pageObj().data, function (html) {
+        $("#role-pid").html(html);
+        layui.form.render();
+    });
+    if (L.pageObj().hasOwnProperty('formData')) {
+        layui.form.val("role-save-form", L.pageObj().formData);
+        url = '/role/' + L.pageObj().formData.id;
+    }
+    layui.form.on('submit(role-save-sub)', function (data) {
+        var checkStatus = layui.table.checkStatus('L-table-role-set-power');
+        let apis = [];
+        $.each(checkStatus.data, function (index, item) {
+            apis.push(item.id);
+        });
+        L.ajax({
+            url: url,
+            data: {
+                apis: apis,
+                name: data.field.name
+            },
+            type: type,
+            success: function (ajaxData) {
+                if (ajaxData.code === 0) {
+                    layer.msg(ajaxData.message, {icon: 1});
+                    L.pageObj().init();
+                    layer.closeAll('page');
+                } else {
+                    layer.msg(ajaxData.message, {icon: 2});
+                }
+            },
+        });
+        return false;
+    });
+</script>

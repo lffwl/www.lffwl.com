@@ -1,0 +1,74 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.max-w-h {
+    width: 100%;
+    height: 100%;
+}
+
+html {
+    --color: #009688;
+    --checkedColor: #5FB878;
+
+    width: 100%;
+    height: 100%;
+    background: #F0F0F0;
+    overflow: hidden;
+}
+
+.layui-layout .layui-body {
+    z-index: 0;
+}
+
+.layui-form-item.required .layui-form-label {
+    color: red;
+}
+
+.menu-tab {
+    background: #FFFFFF;
+    margin: 0;
+}
+
+.page-main {
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+/*.layui-table-body.layui-table-main .layui-table-col-special .layui-btn {*/
+/*    line-height: 27px;*/
+/*}*/
+
+.open-div-main {
+    padding: 15px;
+}
+
+.L-nav-top-icon {
+    width: 60px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.L-nav-top-icon i.layui-icon {
+    font-size: 20px;
+}
+
+.layui-laypage {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.layui-table-view {
+    margin-bottom: 0 !important;
+}
+
+.L-table-page {
+    border-width: 1px;
+    border-style: solid;
+    border-color: #e6e6e6;
+    border-top: none;
+    padding-top: 5px;
+    text-indent: 5px;
+}

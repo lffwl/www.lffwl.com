@@ -1,0 +1,57 @@
+<div class="login-main">
+    <fieldset class="layui-elem-field layui-field-title">
+        <legend>Blog - Admin</legend>
+    </fieldset>
+    <form class="layui-form layui-form-pane" style="margin-top: 30px">
+        <div class="layui-form-item required">
+            <label class="layui-form-label">账号</label>
+            <div class="layui-input-block">
+                <input type="text" name="user_name" required lay-verify="required" placeholder="请输入账号"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item required">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-block">
+                <input type="password" name="password" required lay-verify="required" placeholder="请输入密码"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn" lay-submit lay-filter="signinForm">立即登录</button>
+            </div>
+        </div>
+    </form>
+</div>
+<style>
+    .login-main {
+        width: 400px;
+        height: 300px;
+        padding: 10px;
+        background: #FFFFFF;
+        margin: 250px auto;
+        border-radius: 5px;
+    }
+</style>
+<script>
+    //监听提交
+    layui.form.on('submit(signinForm)', function (data) {
+        L.ajax({
+            url: '/auth/login',
+            data: data.field,
+            success: function (ajaxData) {
+                if (ajaxData.code === 0) {
+                    L.login(ajaxData.data);
+                    L.loadPage({
+                        url: '/page/index',
+                    });
+                } else {
+                    layer.msg(ajaxData.message, {icon: 5});
+                }
+            },
+        });
+        return false;
+    });
+</script>

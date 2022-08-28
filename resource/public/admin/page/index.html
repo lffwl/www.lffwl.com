@@ -1,0 +1,120 @@
+<div class="max-w-h">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <div class="layui-logo">Blog-Admin</div>
+            <!-- 头部区域（可配合layui已有的水平导航） -->
+            <ul class="layui-nav layui-layout-left">
+                <li id="refresh-page" class="layui-nav-item L-nav-top-icon">
+                    <i class="layui-icon layui-icon-refresh-3"></i>
+                </li>
+            </ul>
+            <ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item" id="L-admin-info">
+                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                    <span>加载中...</span>
+                    <!--                    <dl class="layui-nav-child">-->
+                    <!--                        <dd><a href="">基本资料</a></dd>-->
+                    <!--                        <dd><a href="">安全设置</a></dd>-->
+                    <!--                    </dl>-->
+                </li>
+                <li class="layui-nav-item"><a href="javascript:L.loginOut()">退出</a></li>
+            </ul>
+        </div>
+
+        <div class="layui-side layui-bg-black">
+            <div class="layui-side-scroll">
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                <ul id="menu-list" class="layui-nav layui-nav-tree" lay-filter="menu-list"></ul>
+            </div>
+        </div>
+
+        <div class="layui-body">
+            <!-- 内容主体区域 -->
+            <div class="layui-tab layui-tab-card menu-tab" lay-allowClose="true" lay-filter="open-menu-list">
+                <ul class="layui-tab-title">
+
+                </ul>
+                <div class="layui-tab-content page-main">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-footer">
+            <!-- 底部固定区域 -->
+            lffwl.com - blog
+        </div>
+    </div>
+</div>
+<script id="menu-list-tpl" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <li class="layui-nav-item layui-nav-itemed">
+        <a href="javascript:;" data-url="{{ item.menu }}">{{ item.name }}</a>
+        {{# if(item.children){ }}
+        {{# layui.each(item.children, function(iIndex, iItem){ }}
+        <dl class="layui-nav-child">
+            <dd><a href="javascript:;" data-url="{{ iItem.menu }}">{{ iItem.name }}</a></dd>
+        </dl>
+        {{# }); }}
+        {{# } }}
+    </li>
+    {{#  }); }}
+    {{#  if(d.menus === 0){ }}
+    无菜单
+    {{#  } }}
+</script>
+<script>
+    //初始化
+    layui.element.render();
+    $('.page-main').height($(document.body).height() - 167);
+    //加载用户配置
+    L.ajax({
+        url: '/auth/center',
+        type: 'GET',
+        loadTitle: '系统初始化...',
+        success: function (ajaxData) {
+            if (ajaxData.code === 0) {
+                L.setAdminInfo(ajaxData.data);
+                let menu = toTree(ajaxData.data.auth)
+                $("#L-admin-info").find('span').text(L.adminInfo.username);
+                layui.laytpl($("#menu-list-tpl").html()).render(menu, function (html) {
+                    $("#menu-list").html(html);
+                });
+            } else {
+                L.loginOut()
+            }
+
+            layui.element.render();
+
+            //菜单点击事件
+            layui.element.on('nav(menu-list)', function (elem) {
+                let url = elem.attr('data-url');
+                let title = elem.text();
+                if (url == null || url == undefined || url == "" || url == 'null') {
+                    return false;
+                }
+                L.loadTabPage({
+                    url: url,
+                }, 'menu', title);
+
+            });
+        },
+    });
+
+    //监听菜单删除事件
+    layui.element.on('tabDelete(open-menu-list)', function (data) {
+        let layId = $(this).parent('li').attr('lay-id');
+        L.delTabPage(layId);
+    });
+
+    //监听tab-menu切换事件
+    layui.element.on('tab(open-menu-list)', function (data) {
+        let layId = $(this).attr('lay-id');
+        L.page = layId;
+    });
+
+    //刷新页面
+    $("#refresh-page").click(function () {
+        L.pageObj().init(true);
+    });
+
+</script>

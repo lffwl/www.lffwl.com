@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog - Admin</title>
+    <link rel="stylesheet" href="/resource/layui/css/layui.css">
+    <link rel="stylesheet" href="/resource/css/public.css?d=20210226">
+    <link rel="stylesheet" href="/resource/css/monokai_sublime.min.css">
+</head>
+<body class="max-w-h">
+<div class="max-w-h" id="L-Body"></div>
+</body>
+<script src="/resource/js/jquery-1.12.3.min.js"></script>
+<script src="/resource/layui/layui.js"></script>
+<script src="/resource/js/index.js?d=20210226"></script>
+<script src="/resource/js/jquery.md5.js"></script>
+<script src="/resource/js/common.js"></script>
+<script src="/resource/js/format.js"></script>
+<!-- Editor  -->
+<script src="/resource/js/wangEditor.min.js"></script>
+<script src="/resource/js/highlight.min.js"></script>
+<!-- Editor  -->
+<script type="text/javascript">
+    var L;
+    layer.ready(function () {
+        L = new obj();
+        if (L.checkLogin()) {
+            L.loadPage({
+                url: '/page/login/signin',
+            });
+        } else {
+            L.loadPage({
+                url: '/page/index',
+            });
+        }
+    });
+</script>
+</html>

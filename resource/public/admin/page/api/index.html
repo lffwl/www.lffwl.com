@@ -1,0 +1,77 @@
+<div class="layui-btn-group">
+    <button type="button" class="layui-btn" data-action="manage.auth.api.store" id="system-power-save">
+        <i class="layui-icon layui-icon-addition"></i> 新增
+    </button>
+</div>
+<table class="layui-hide" id="L-table-power" lay-filter="L-table-power"></table>
+<div id="L-table-power-action" class="layui-hide">
+    <a class="layui-btn layui-btn-xs" lay-event="update" data-action="manage.auth.api.update">编辑</a>
+    <a class="layui-btn layui-btn-xs" lay-event="delete" data-action="manage.auth.api.delete">删除</a>
+</div>
+<script>
+    L.openPage[L.page] = {
+        init: function (data) {
+            L.loadTable({
+                url: '/api',
+                where: data || {},
+                elem: '#L-table-power',
+                page: false,
+                cols: [[
+                    {field: 'id', title: 'ID', width: 100}
+                    , {
+                        field: 'name', title: '菜单名称', templet: function (d) {
+                            return d.level + d.name;
+                        }
+                    }
+                    , {
+                        field: 'type', title: '菜单类型', templet: function (d) {
+                            return L.pageObj().data.config.type[d.type] ?? '';
+                        }, width: 100
+                    }
+                    , {field: 'key', title: '标识'}
+                    , {field: 'path', title: '接口地址'}
+                    , {
+                        field: 'method', title: '请求类型', templet: function (d) {
+                            return L.pageObj().data.config.method[d.method] ?? '';
+                        }, width: 100
+                    }
+                    , {field: 'menu', title: '菜单地址'}
+                    , {title: '操作', width: 130, align: 'center', toolbar: '#L-table-power-action'}
+                ]]
+                , height: 'full-230'
+                , handleData: function (data) {
+                    return toTreeList(data, 0, 0)
+                }
+            });
+        }
+    };
+
+    layui.table.on('tool(L-table-power)', function (obj) {
+        if (obj.event == 'update') {
+            L.pageObj().formData = ajaxData.data;
+            L.loadPage({
+                url: '/page/api/save'
+            }, 'open', '编辑权限');
+        } else if (obj.event == 'delete') {
+            L.deleteRow({
+                url: '/system/power/' + obj.data.id + '/delete',
+                success: function (ajaxData) {
+                    if (ajaxData.code === 0) {
+                        layer.msg(ajaxData.message, {icon: 1});
+                        L.pageObj().init();
+                    }
+                }
+            });
+        }
+    });
+
+    L.pageObj().init();
+
+    //新增
+    $("#system-power-save").click(function () {
+        delete L.pageObj().formData;
+        L.loadPage({
+            url: '/page/api/save'
+        }, 'open', '新增权限');
+    });
+</script>

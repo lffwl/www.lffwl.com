@@ -1,0 +1,92 @@
+<div class="open-div-main">
+    <form class="layui-form layui-form-pane" lay-filter="admin-save-form">
+        <div class="layui-form-item required">
+            <label class="layui-form-label">账号</label>
+            <div class="layui-input-block">
+                <input type="text" name="username" required lay-verify="required" placeholder="请输入账号"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item required">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-block">
+                <input type="password" name="password" required lay-verify="required" placeholder="请输入密码"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <table class="layui-hide" id="L-table-admin-set-role" lay-filter="L-table-admin-set-role"></table>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn" lay-submit lay-filter="admin-save-sub">立即提交</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+
+    let setRole = {
+        init: function (data) {
+            L.loadTable({
+                url: '/role',
+                where: data || {},
+                elem: '#L-table-admin-set-role',
+                cols: [[
+                    {type: 'checkbox'}
+                    , {field: 'id', title: 'ID', width: 100}
+                    , {field: 'name', title: '角色名称'}
+                    , {field: 'createdAt', title: '添加时间'}
+                    , {field: 'updatedAt', title: '最近修改时间'}
+                ]]
+                , height: 'full-450'
+                , page: {limit: 50, limits: [50]}
+                , loadOver: function (res) {
+                    if (L.pageObj().hasOwnProperty('formData')) {
+                        if (L.pageObj().formData.roles.length > 0) {
+                            layuiTableCheckboxDefault(L.pageObj().formData.roles, $(".layui-table-view[lay-id=L-table-admin-set-role]").find('.layui-table-main'), 1);
+                        }
+                    }
+                }
+            }, setRole);
+        }
+    };
+
+    setRole.init();
+
+    let url = '/admin', type = 'POST';
+    layui.form.render();
+    if (L.pageObj().hasOwnProperty('formData')) {
+        $("input[name=password]").attr('placeholder', '留空不修改密码')
+        $("input[name=password]").removeAttr('required')
+        $("input[name=password]").removeAttr('lay-verify')
+        $("input[name=password]").parents('.layui-form-item').removeClass('required')
+        layui.form.val("admin-save-form", L.pageObj().formData);
+        url = '/admin/' + L.pageObj().formData.id;
+    }
+    layui.form.on('submit(admin-save-sub)', function (data) {
+        var checkStatus = layui.table.checkStatus('L-table-admin-set-role');
+        let roles = [];
+        $.each(checkStatus.data, function (index, item) {
+            roles.push(item.id);
+        });
+        data.field.roles = roles
+        L.ajax({
+            url: url,
+            data: data.field,
+            type: type,
+            success: function (ajaxData) {
+                if (ajaxData.code === 0) {
+                    layer.msg(ajaxData.message, {icon: 1});
+                    L.pageObj().init(true);
+                    layer.closeAll('page');
+                } else {
+                    layer.msg(ajaxData.message, {icon: 2});
+                }
+            },
+        });
+        return false;
+    });
+</script>

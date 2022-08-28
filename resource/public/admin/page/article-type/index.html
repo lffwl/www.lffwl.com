@@ -1,0 +1,57 @@
+<div class="layui-btn-group">
+    <button type="button" class="layui-btn" data-action="manage.content.articleType.store" id="system-blog-type-save">
+        <i class="layui-icon layui-icon-addition"></i> 新增
+    </button>
+</div>
+<table class="layui-hide" id="L-table-blog-type" lay-filter="L-table-blog-type"></table>
+<div id="L-table-blog-type-action" class="layui-hide">
+    <a class="layui-btn layui-btn-xs" lay-event="update" data-action="manage.content.articleType.update">编辑</a>
+    <a class="layui-btn layui-btn-xs" lay-event="delete" data-action="manage.content.articleType.delete">删除</a>
+</div>
+<script>
+    L.openPage[L.page] = {
+        init: function (data) {
+            L.loadTable({
+                url: '/article_type',
+                where: data || {},
+                elem: '#L-table-blog-type',
+                cols: [[
+                    {field: 'id', title: 'ID', width: 100}
+                    , {field: 'name', title: '名称'}
+                    , {field: 'createdAt', title: '添加时间'}
+                    , {field: 'updatedAt', title: '最近修改时间'}
+                    , {title: '操作', width: 200, align: 'center', toolbar: '#L-table-blog-type-action'}
+                ]]
+            });
+        }
+    };
+
+    layui.table.on('tool(L-table-blog-type)', function (obj) {
+        if (obj.event === 'update') {
+            L.pageObj().formData = obj.data;
+            L.loadPage({
+                url: '/page/article-type/save'
+            }, 'open', '编辑博客类型');
+        } else if (obj.event === 'delete') {
+            L.deleteRow({
+                url: '/article_type/' + obj.data.id + '/delete',
+                success: function (ajaxData) {
+                    if (ajaxData.code === 0) {
+                        layer.msg(ajaxData.message, {icon: 1});
+                        L.pageObj().init();
+                    }
+                }
+            });
+        }
+    });
+
+    L.pageObj().init();
+
+    //新增
+    $("#system-blog-type-save").click(function () {
+        delete L.pageObj().formData;
+        L.loadPage({
+            url: '/page/article-type/save'
+        }, 'open', '新增博客类型');
+    });
+</script>

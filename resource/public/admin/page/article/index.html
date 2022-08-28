@@ -1,0 +1,67 @@
+<div class="layui-btn-group">
+    <button type="button" class="layui-btn" data-action="manage.content.article.store" id="system-blog-save">
+        <i class="layui-icon layui-icon-addition"></i> 新增
+    </button>
+</div>
+<table class="layui-hide" id="L-table-blog" lay-filter="L-table-blog"></table>
+<div id="L-table-blog-action" class="layui-hide">
+    <a class="layui-btn layui-btn-xs" lay-event="update" data-action="manage.content.article.update">编辑</a>
+    <a class="layui-btn layui-btn-xs" lay-event="delete" data-action="manage.content.article.delete">删除</a>
+</div>
+<script>
+    L.openPage[L.page] = {
+        init: function (data) {
+            L.loadTable({
+                url: '/article',
+                where: data || {},
+                elem: '#L-table-blog',
+                cols: [[
+                    {field: 'id', title: 'ID', width: 100}
+                    , {field: 'name', title: '标题'}
+                    , {
+                        field: 'typeId', title: '分类', templet: function (d) {
+                            return L.pageObj().data.config.articleType[d.typeId] ?? '';
+                        }
+                    }
+                    , {field: 'createdAt', title: '添加时间'}
+                    , {field: 'updatedAt', title: '最近修改时间'}
+                    , {title: '操作', width: 200, align: 'center', toolbar: '#L-table-blog-action'}
+                ]]
+            });
+        }
+    };
+
+    layui.table.on('tool(L-table-blog)', function (obj) {
+        if (obj.event === 'update') {
+            L.pageObj().formData = obj.data;
+            L.loadPage({
+                url: '/page/article/save'
+            }, 'open', '编辑博客', {
+                area: ['60%', '70%'],
+                zIndex: 20,
+            });
+        } else if (obj.event === 'delete') {
+            L.deleteRow({
+                url: '/article/' + obj.data.id + '/delete',
+                success: function (ajaxData) {
+                    if (ajaxData.code === 0) {
+                        layer.msg(ajaxData.message, {icon: 1});
+                        L.pageObj().init();
+                    }
+                }
+            });
+        }
+    });
+
+    L.pageObj().init();
+
+    //新增
+    $("#system-blog-save").click(function () {
+        delete L.pageObj().formData;
+        L.loadPage({
+            url: '/page/article/save'
+        }, 'open', '新增博客', {
+            area: ['60%', '70%']
+        });
+    });
+</script>

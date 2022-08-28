@@ -1,0 +1,108 @@
+<div class="open-div-main">
+    <form class="layui-form layui-form-pane" lay-filter="power-save-form">
+        <div class="layui-form-item required">
+            <label class="layui-form-label">菜单名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" required lay-verify="required" placeholder="请输入菜单名称" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item required">
+            <label class="layui-form-label">标识</label>
+            <div class="layui-input-block">
+                <input type="text" name="key" required lay-verify="required" placeholder="请输入标识"
+                       autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">菜单地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="menu" placeholder="请输入菜单地址" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">上级菜单</label>
+            <div class="layui-input-block">
+                <select name="pid" id="power-pid">
+
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item" pane>
+            <label class="layui-form-label">菜单类型</label>
+            <div class="layui-input-block" id="power-menu-type">
+
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">请求地址</label>
+            <div class="layui-input-block">
+                <input type="text" name="path" placeholder="请输入请求地址" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item" pane="">
+            <label class="layui-form-label">请求类型</label>
+            <div class="layui-input-block" id="power-api-methods">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn" lay-submit lay-filter="power-save-sub">立即提交</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script id="power-menu-type-tpl" type="text/html">
+    {{#  layui.each(d.type, function(index, item){ }}
+    <input type="radio" name="type" value="{{index}}" title="{{item}}">
+    {{#  }); }}
+</script>
+<script id="power-api-methods-tpl" type="text/html">
+    {{#  layui.each(d.method, function(index, item){ }}
+    <input type="radio" name="method" title="{{item}}" value="{{index}}" lay-skin="primary">
+    {{#  }); }}
+</script>
+<script id="power-pid-tpl" type="text/html">
+    <option value=""></option>
+    {{#  layui.each(d, function(index, item){ }}
+    <option value="{{item.id}}">{{item.level}}{{item.name}}</option>
+    {{#  }); }}
+</script>
+<script>
+    let url = '/api', type = 'POST';
+    layui.form.render();
+    layui.laytpl($("#power-menu-type-tpl").html()).render(L.pageObj().data.config, function (html) {
+        $("#power-menu-type").html(html);
+        layui.form.render();
+    });
+    layui.laytpl($("#power-api-methods-tpl").html()).render(L.pageObj().data.config, function (html) {
+        $("#power-api-methods").html(html);
+        layui.form.render();
+    });
+    layui.laytpl($("#power-pid-tpl").html()).render(L.pageObj().data.list, function (html) {
+        $("#power-pid").html(html);
+        layui.form.render();
+    });
+    if (L.pageObj().hasOwnProperty('formData')) {
+        layui.form.val("power-save-form", L.pageObj().formData);
+        url = '/api/' + L.pageObj().formData.id;
+    }
+    layui.form.on('submit(power-save-sub)', function (data) {
+        L.ajax({
+            url: url,
+            data: data.field,
+            type: type,
+            success: function (ajaxData) {
+                if (ajaxData.code === 0) {
+                    layer.msg(ajaxData.message, {icon: 1});
+                    L.pageObj().init();
+                    layer.closeAll('page');
+                } else {
+                    layer.msg(ajaxData.message, {icon: 2});
+                }
+            },
+        });
+        return false;
+    });
+</script>
