@@ -3,6 +3,7 @@ package manage
 import (
 	"context"
 	"errors"
+	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/util/gconv"
 	"github.com/lffwl/utility/dataproc"
 	"www.lffwl.com/api/manage"
@@ -59,11 +60,6 @@ func (c *cAuth) Center(ctx context.Context, req *manage.AuthCenterReq) (res *man
 		return nil, err
 	}
 
-	apis, err := auth.RoleApi(ctx).GetApisByRoles(info.Roles)
-	if err != nil {
-		return nil, err
-	}
-
 	res = &manage.AuthCenterRes{
 		Id:        info.Id,
 		Username:  info.Username,
@@ -72,8 +68,21 @@ func (c *cAuth) Center(ctx context.Context, req *manage.AuthCenterReq) (res *man
 		Roles:     info.Roles,
 	}
 
-	if res.Auth, err = auth.Api(ctx).Index(model.ApiIndexInput{Ids: apis}); err != nil {
-		return nil, err
+	if info.Id != g.Cfg("auth").MustGet(ctx, "superRoleId").Int() {
+		apis, err := auth.RoleApi(ctx).GetApisByRoles(info.Roles)
+		if err != nil {
+			return nil, err
+		}
+
+		if len(apis) > 0 {
+			if res.Auth, err = auth.Api(ctx).Index(model.ApiIndexInput{Ids: apis}); err != nil {
+				return nil, err
+			}
+		}
+	} else {
+		if res.Auth, err = auth.Api(ctx).AllIndex(); err != nil {
+			return nil, err
+		}
 	}
 
 	return
