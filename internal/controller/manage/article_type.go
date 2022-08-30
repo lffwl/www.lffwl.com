@@ -3,7 +3,7 @@ package manage
 import (
 	"context"
 	"www.lffwl.com/internal/model"
-	"www.lffwl.com/internal/service/article"
+	"www.lffwl.com/internal/service/content"
 
 	"www.lffwl.com/api/manage"
 )
@@ -16,7 +16,7 @@ type cArticleType struct{}
 
 func (c *cArticleType) Index(ctx context.Context, req *manage.ArticleTypeIndexReq) (res *manage.ArticleTypeIndexRes, err error) {
 
-	data, err := article.ArticleType(ctx).Index(model.ArticleTypeIndexInput{
+	data, err := content.ArticleType(ctx).Index(model.ArticleTypeIndexInput{
 		Page:  req.Page,
 		Limit: req.Size,
 		Name:  req.Name,
@@ -39,7 +39,7 @@ func (c *cArticleType) Index(ctx context.Context, req *manage.ArticleTypeIndexRe
 
 func (c *cArticleType) Store(ctx context.Context, req *manage.ArticleTypeStoreReq) (res *manage.ArticleTypeStoreRes, err error) {
 
-	err = article.ArticleType(ctx).Store(model.ArticleTypeStoreInput{
+	err = content.ArticleType(ctx).Store(model.ArticleTypeStoreInput{
 		Name: req.Name,
 	})
 
@@ -48,7 +48,7 @@ func (c *cArticleType) Store(ctx context.Context, req *manage.ArticleTypeStoreRe
 
 func (c *cArticleType) Update(ctx context.Context, req *manage.ArticleTypeUpdateReq) (res *manage.ArticleTypeUpdateRes, err error) {
 
-	err = article.ArticleType(ctx).Update(model.ArticleTypeUpdateInput{
+	err = content.ArticleType(ctx).Update(model.ArticleTypeUpdateInput{
 		Id:   int(req.Id),
 		Name: req.Name,
 	})
@@ -58,7 +58,7 @@ func (c *cArticleType) Update(ctx context.Context, req *manage.ArticleTypeUpdate
 
 func (c *cArticleType) Delete(ctx context.Context, req *manage.ArticleTypeDeleteReq) (res *manage.ArticleTypeDeleteRes, err error) {
 
-	err = article.ArticleType(ctx).PkDelete(int(req.Id))
+	err = content.ArticleType(ctx).PkDelete(int(req.Id))
 
 	return
 }

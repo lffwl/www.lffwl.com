@@ -1,4 +1,4 @@
-package article
+package content
 
 import (
 	"context"
@@ -64,7 +64,7 @@ func (s *article) Index(input model.ArticleIndexInput) (output *model.ArticleInd
 func (s *article) CreateFilePath() string {
 	now := time.Now()
 
-	filePath := g.Cfg().MustGet(s.ctx, "file.articlePath").String() + now.Format("/2006-01-02/") + gconv.String(now.Second()) + gconv.String(now.Nanosecond()) + ".txt"
+	filePath := g.Cfg("content").MustGet(s.ctx, "file.articlePath").String() + now.Format("/2006-01-02/") + gconv.String(now.Second()) + gconv.String(now.Nanosecond()) + ".txt"
 
 	if err := file.CreateFilePathDir(filePath); err != nil {
 		g.Log().Error(s.ctx, err)
