@@ -64,7 +64,7 @@ func (s *article) Index(input model.ArticleIndexInput) (output *model.ArticleInd
 func (s *article) CreateFilePath() string {
 	now := time.Now()
 
-	filePath := g.Cfg("content").MustGet(s.ctx, "file.articlePath").String() + now.Format("/2006-01-02/") + gconv.String(now.Second()) + gconv.String(now.Nanosecond()) + ".txt"
+	filePath := g.Cfg("content").MustGet(s.ctx, "file.articlePath").String() + now.Format("/2006-01-02/") + now.Format("20060102150405") + "-" + gconv.String(now.Nanosecond()) + ".txt"
 
 	if err := file.CreateFilePathDir(filePath); err != nil {
 		g.Log().Error(s.ctx, err)
@@ -163,8 +163,17 @@ func (s *article) PkDelete(id int) error {
 		return errors.New("ID不存在")
 	}
 
+	info, err := s.Info(id, dao.Article.Columns().Content)
+	if err != nil {
+		return err
+	}
+
 	if _, err := s.model.Where(dao.ArticleType.Columns().Id, id).Delete(); err != nil {
 		return err
+	}
+
+	if info.Content != "" {
+		os.Remove(info.Content)
 	}
 
 	return nil
