@@ -382,6 +382,16 @@ var obj = function (config) {
         let E = window.wangEditor
         let editor = new E(selector)
 
+        // 自定义插入图片
+        editor.config.uploadImgHooks = {
+            customInsert: function (insertImgFn, result) {
+                // result 即服务端返回的接口
+                console.log('customInsert', result)
+
+                insertImgFn(result.data.url)
+            }
+        }
+
         editor.config.zIndex = 20
 
         // 挂载highlight插件
@@ -391,11 +401,11 @@ var obj = function (config) {
         editor.config.uploadImgServer = '/manage/file/upload'
 
         //fileName
-        editor.config.uploadFileName = 'image'
+        editor.config.uploadFileName = 'file'
 
         //设置token
         editor.config.uploadImgHeaders = {
-            Authorization: 'Bearer ' + __this.getToken(),
+            "Access-Token": __this.getToken(),
         };
 
         editor.create()

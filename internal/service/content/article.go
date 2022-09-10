@@ -6,7 +6,8 @@ import (
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/util/gconv"
-	"github.com/lffwl/utility/file"
+	"github.com/gogf/gf/v2/util/grand"
+	ufile "github.com/lffwl/utility/file"
 	"io/ioutil"
 	"os"
 	"time"
@@ -64,9 +65,9 @@ func (s *article) Index(input model.ArticleIndexInput) (output *model.ArticleInd
 func (s *article) CreateFilePath() string {
 	now := time.Now()
 
-	filePath := g.Cfg("content").MustGet(s.ctx, "file.articlePath").String() + now.Format("/2006-01-02/") + now.Format("20060102150405") + "-" + gconv.String(now.Nanosecond()) + ".txt"
+	filePath := g.Cfg("content").MustGet(s.ctx, "file.articlePath").String() + now.Format("/2006-01-02/") + gconv.String(now.UnixNano()) + grand.S(10) + ".txt"
 
-	if err := file.CreateFilePathDir(filePath); err != nil {
+	if err := ufile.CreateFilePathDir(filePath); err != nil {
 		g.Log().Error(s.ctx, err)
 	}
 
