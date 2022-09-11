@@ -11,13 +11,15 @@ import (
 type articleType struct {
 	model *gdb.Model
 	ctx   context.Context
+	cache map[string]int
 }
 
+var inArticleType = &articleType{cache: map[string]int{}}
+
 func ArticleType(ctx context.Context) *articleType {
-	return &articleType{
-		model: dao.ArticleType.Ctx(ctx),
-		ctx:   ctx,
-	}
+	inArticleType.ctx = ctx
+	inArticleType.model = dao.ArticleType.Ctx(ctx)
+	return inArticleType
 }
 
 func (s *articleType) Index(input model.ArticleTypeIndexInput) (output *model.ArticleTypeIndexOutput, err error) {
@@ -50,79 +52,88 @@ func (s *articleType) AllIndex() (output []model.ArticleTypeAllIndexOutput, err 
 	return
 }
 
-func (s *articleType) ConfigAllIndex() (output map[int]string, err error) {
-
-	output = map[int]string{}
+func (s *articleType) LoadCache() error {
 
 	data, err := s.AllIndex()
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	if len(data) > 0 {
 		for _, item := range data {
-			output[item.Id] = item.Name
+			s.cache[item.Name] = item.Id
 		}
-	}
-
-	return
-}
-
-func (s *articleType) CheckNameUnique(name string, id ...int) (bool, error) {
-
-	m := s.model.Where(dao.ArticleType.Columns().Name, name)
-
-	if len(id) > 0 {
-		m = m.WhereNot(dao.ArticleType.Columns().Id, id[0])
-	}
-
-	if num, err := m.Count(); err != nil {
-		return false, err
-	} else if num > 0 {
-		return true, nil
-	}
-
-	return false, nil
-}
-
-func (s *articleType) Store(input model.ArticleTypeStoreInput) error {
-
-	if exist, err := s.CheckNameUnique(input.Name); err != nil {
-		return err
-	} else if exist {
-		return errors.New("文章分类已存在")
-	}
-
-	if _, err := s.model.Data(input).Save(); err != nil {
-		return err
 	}
 
 	return nil
 }
 
-func (s *articleType) CheckIdExist(id int) (bool, error) {
+func (s *articleType) ConfigAllIndex() map[int]string {
 
-	if num, err := s.model.Where(dao.ArticleType.Columns().Id, id).Count(); err != nil {
-		return false, err
-	} else if num > 0 {
-		return true, nil
+	output := map[int]string{}
+
+	if len(s.cache) > 0 {
+		for name, id := range s.cache {
+			output[id] = name
+		}
 	}
 
-	return false, nil
+	return output
+}
+
+func (s *articleType) CheckNameUnique(name string, id ...int) bool {
+
+	for val, key := range s.cache {
+		if len(id) > 0 {
+			if id[0] != key && val == name {
+				return true
+			}
+		} else {
+			if val == name {
+				return true
+			}
+		}
+
+	}
+
+	return false
+}
+
+func (s *articleType) Store(input model.ArticleTypeStoreInput) error {
+
+	if exist := s.CheckNameUnique(input.Name); exist {
+		return errors.New("文章分类已存在")
+	}
+
+	insertId, err := s.model.Data(input).InsertAndGetId()
+	if err != nil {
+		return err
+	}
+
+	s.cache[input.Name] = int(insertId)
+
+	return nil
+}
+
+func (s *articleType) CheckIdExist(id int) bool {
+
+	for _, val := range s.cache {
+		if val == id {
+			return true
+		}
+	}
+
+	return false
 
 }
 
 func (s *articleType) Update(input model.ArticleTypeUpdateInput) error {
 
-	if exist, err := s.CheckIdExist(input.Id); err != nil {
-		return err
-	} else if !exist {
+	if exist := s.CheckIdExist(input.Id); !exist {
 		return errors.New("ID不存在")
 	}
 
-	if exist, err := s.CheckNameUnique(input.Name, input.Id); err != nil {
-		return err
-	} else if exist {
+	if exist := s.CheckNameUnique(input.Name, input.Id); exist {
 		return errors.New("文章分类已存在")
 	}
 
@@ -130,14 +141,16 @@ func (s *articleType) Update(input model.ArticleTypeUpdateInput) error {
 		return err
 	}
 
+	s.deleteCache(input.Id)
+
+	s.cache[input.Name] = input.Id
+
 	return nil
 }
 
 func (s *articleType) PkDelete(id int) error {
 
-	if exist, err := s.CheckIdExist(id); err != nil {
-		return err
-	} else if !exist {
+	if exist := s.CheckIdExist(id); !exist {
 		return errors.New("ID不存在")
 	}
 
@@ -145,5 +158,16 @@ func (s *articleType) PkDelete(id int) error {
 		return err
 	}
 
+	s.deleteCache(id)
+
 	return nil
+}
+
+func (s *articleType) deleteCache(id int) {
+	for name, valId := range s.cache {
+		if id == valId {
+			delete(s.cache, name)
+			break
+		}
+	}
 }

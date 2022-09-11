@@ -33,10 +33,7 @@ func (c *cArticle) Index(ctx context.Context, req *manage.ArticleIndexReq) (res 
 		},
 	}
 
-	res.Config.ArticleType, err = content.ArticleType(ctx).ConfigAllIndex()
-	if err != nil {
-		return nil, err
-	}
+	res.Config.ArticleType = content.ArticleType(ctx).ConfigAllIndex()
 
 	return
 }
