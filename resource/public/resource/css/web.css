@@ -13,7 +13,7 @@ body {
 }
 
 .header {
-    height: 200px;
+    height: 220px;
     background: #393D49;
 }
 
@@ -37,17 +37,19 @@ body {
 .blog-type {
     background: #393D49;
     height: 60px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .blog-type ul {
     margin: 0 auto;
-    width: 1200px;
     display: block;
 }
 
 .blog {
     margin: 30px auto;
-    width: 1200px;
+    max-width: 1200px;
+    min-height: 400px;
 }
 
 .blog ul li {
@@ -56,6 +58,7 @@ body {
     margin-bottom: 20px;
     border-bottom: 1px solid #e0e0e0;
     border-left: 1px solid #e0e0e0;
+    position: relative;
 }
 
 .blog li div {
@@ -65,7 +68,6 @@ body {
 .blog li div a {
     color: #000000;
     font-size: 24px;
-    display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
 }
@@ -86,6 +88,7 @@ body {
 .blog .time {
     color: #999;
     padding: 15px 0;
+    text-align: right;
 
 }
 
@@ -93,6 +96,7 @@ body {
     background: #FFFFFF;
     padding: 15px;
     border-radius: 10px;
+    margin-top: 20px;
 }
 
 .ba {
@@ -175,4 +179,10 @@ pre code {
 /* ul ol 样式 */
 .content ul, ol {
     margin: 10px 0 10px 20px;
+}
+
+.blog .label {
+    position: absolute;
+    right: 10px;
+    top: 10px;
 }

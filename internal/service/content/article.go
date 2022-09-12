@@ -194,10 +194,7 @@ func (s *article) Show(id int) (output *model.ArticleShowOutput, err error) {
 	}
 
 	output = &model.ArticleShowOutput{
-		Id:     info.Id,
-		Name:   info.Name,
-		TypeId: info.TypeId,
-		Desc:   info.Desc,
+		Article: info,
 	}
 
 	if info.Content != "" {

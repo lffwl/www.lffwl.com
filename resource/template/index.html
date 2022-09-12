@@ -1,0 +1,27 @@
+{{include "header.html" .}}
+<div class="blog">
+    {{if .list}}
+    <ul>
+        {{range $key, $value := .list}}
+        <li>
+            <a href="/{{$.Process.MapIntOutStr $.typeMap $value.TypeId}}"
+               class="layui-btn layui-btn-xs label layui-btn-normal">{{$.Process.MapIntOutStr
+                $.typeMap $value.TypeId}}</a>
+            <div>
+                <a href="/{{$.Process.MapIntOutStr $.typeMap $value.TypeId}}/{{$value.Id}}.html">{{$value.Name}}</a>
+            </div>
+            <p> {{$value.Desc}}</p>
+            <p> {{$value.UpdatedAt}}</p>
+        </li>
+        {{end}}
+    </ul>
+    <div class="layui-box layui-laypage layui-laypage-default">{{.page}}</div>
+    {{else}}
+    <blockquote class="layui-elem-quote">暂无数据</blockquote>
+    {{end}}
+</div>
+{{if eq .typeId 0}}
+<div class="ba"><a href="https://beian.miit.gov.cn/" target="_blank">湘ICP备2021013378号-1</a></div>
+{{end}}
+</body>
+</html>

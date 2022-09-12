@@ -30,9 +30,5 @@ type ArticleUpdateInput struct {
 }
 
 type ArticleShowOutput struct {
-	Id      int
-	Name    string
-	TypeId  int
-	Content string
-	Desc    string
+	*entity.Article
 }

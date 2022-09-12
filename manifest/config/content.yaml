@@ -1,2 +1,8 @@
 file:
   articlePath: "./file"
+
+
+seo:
+  title: " - LFFWL的个人博客 - 秃秃秃"
+  seoKey: ",GO,PHP,Golang,Laravel,Thinkphp,js,jq,vue"
+  seoDesc: ",GO,PHP,Golang,Laravel,Thinkphp,js,jq,vue等技术分享"

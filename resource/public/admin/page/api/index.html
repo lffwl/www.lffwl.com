@@ -48,7 +48,7 @@
 
     layui.table.on('tool(L-table-power)', function (obj) {
         if (obj.event == 'update') {
-            L.pageObj().formData = ajaxData.data;
+            L.pageObj().formData = obj.data;
             L.loadPage({
                 url: '/page/api/save'
             }, 'open', '编辑权限');

@@ -99,6 +99,19 @@ func (s *articleType) CheckNameUnique(name string, id ...int) bool {
 	return false
 }
 
+func (s *articleType) GetIdByName(name string) int {
+
+	for val, id := range s.cache {
+
+		if val == name {
+			return id
+		}
+
+	}
+
+	return 0
+}
+
 func (s *articleType) Store(input model.ArticleTypeStoreInput) error {
 
 	if exist := s.CheckNameUnique(input.Name); exist {
