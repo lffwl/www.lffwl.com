@@ -113,7 +113,7 @@ body {
 
 .about {
     margin: 30px auto;
-    width: 1160px;
+    max-width: 1160px;
     padding: 20px;
     border-radius: 10px;
     background: #FFFFFF;
