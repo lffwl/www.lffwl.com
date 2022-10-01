@@ -41,7 +41,7 @@ func (s *article) Index(input model.ArticleIndexInput) (output *model.ArticleInd
 		m = m.Where(dao.Article.Columns().TypeId, input.TypeId)
 	}
 
-	if err = m.Page(input.Page, input.Limit).Scan(&output.List); err != nil {
+	if err = m.Page(input.Page, input.Limit).OrderDesc(dao.Article.Columns().Id).Scan(&output.List); err != nil {
 		return nil, err
 	}
 
