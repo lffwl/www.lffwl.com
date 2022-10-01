@@ -91,9 +91,11 @@ func (c *cHome) Show(ctx context.Context, req *blog.HomeShowReq) (res *blog.Home
 	title = info.Name
 
 	content.View().RenderTpl(ctx, "show.html", map[string]interface{}{
-		"typeId": typeId,
-		"Title":  title,
-		"info":   info,
+		"typeId":  typeId,
+		"Title":   title,
+		"info":    info,
+		"SeoKey":  title,
+		"SeoDesc": info.Desc,
 	})
 
 	return
